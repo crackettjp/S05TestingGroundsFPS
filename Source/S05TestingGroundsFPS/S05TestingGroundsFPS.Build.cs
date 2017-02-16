@@ -6,6 +6,6 @@ public class S05TestingGroundsFPS : ModuleRules
 {
 	public S05TestingGroundsFPS(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "GameplayTasks" });
 	}
 }
