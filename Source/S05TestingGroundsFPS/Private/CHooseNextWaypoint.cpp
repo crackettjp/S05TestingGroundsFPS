@@ -4,23 +4,32 @@
 #include "CHooseNextWaypoint.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
-#include "PatrollingGuard.h" // FIXIT remove coupling
+#include "PatrolRoute.h"
 
 EBTNodeResult::Type UCHooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	// Get the Patrol Points.
-	APatrollingGuard* ControlledGuard = Cast<APatrollingGuard>(OwnerComp.GetAIOwner()->GetPawn());
-	TArray<AActor*> PatrolPoints = ControlledGuard->GetPatrolPoints();
+	UPatrolRoute* PatrolRoute = OwnerComp.GetAIOwner()->GetPawn()->FindComponentByClass<UPatrolRoute>();
+	if (!ensure(PatrolRoute))
+	{
+		return EBTNodeResult::Failed;
+	}
+	TArray<AActor*> PatrolPoints = PatrolRoute->GetPatrolPoints();
+	if (PatrolPoints.Num() == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s PatrolRoute component has no patrol points"), *OwnerComp.GetAIOwner()->GetPawn()->GetName());
+		return EBTNodeResult::Failed;
+	}
 
+	// Set the next way point.
 	UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
 	int32 Index = BlackboardComp->GetValueAsInt(IndexKey.SelectedKeyName);
-	if (PatrolPoints.Num() > 0)
-	{
-		BlackboardComp->SetValueAsObject(WaypointKey.SelectedKeyName, PatrolPoints[Index]);
-		Index += 1;
-		Index = Index % PatrolPoints.Num();
-		BlackboardComp->SetValueAsInt(IndexKey.SelectedKeyName, Index);
-	}
+	BlackboardComp->SetValueAsObject(WaypointKey.SelectedKeyName, PatrolPoints[Index]);
+
+	// Cycle the way point.
+	Index += 1;
+	Index = Index % PatrolPoints.Num();
+	BlackboardComp->SetValueAsInt(IndexKey.SelectedKeyName, Index);
 
 	return EBTNodeResult::Succeeded;
 }
