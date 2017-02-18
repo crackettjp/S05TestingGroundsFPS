@@ -1,16 +1,16 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
 #include "S05TestingGroundsFPS.h"
-#include "S05TestingGroundsFPSProjectile.h"
+#include "BallProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-AS05TestingGroundsFPSProjectile::AS05TestingGroundsFPSProjectile() 
+ABallProjectile::ABallProjectile() 
 {
 	// Use a sphere as a simple collision representation
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
-	CollisionComp->OnComponentHit.AddDynamic(this, &AS05TestingGroundsFPSProjectile::OnHit);		// set up a notification for when this component hits something blocking
+	CollisionComp->OnComponentHit.AddDynamic(this, &ABallProjectile::OnHit);		// set up a notification for when this component hits something blocking
 
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
@@ -31,7 +31,7 @@ AS05TestingGroundsFPSProjectile::AS05TestingGroundsFPSProjectile()
 	InitialLifeSpan = 3.0f;
 }
 
-void AS05TestingGroundsFPSProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ABallProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL) && OtherComp->IsSimulatingPhysics())

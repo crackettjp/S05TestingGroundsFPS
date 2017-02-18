@@ -2,7 +2,7 @@
 
 #include "S05TestingGroundsFPS.h"
 #include "S05TestingGroundsFPSGameMode.h"
-#include "S05TestingGroundsFPSHUD.h"
+#include "Player/TestingGroundsHUD.h"
 #include "Player/FirstPersonCharacter.h"
 
 AS05TestingGroundsFPSGameMode::AS05TestingGroundsFPSGameMode()
@@ -13,5 +13,5 @@ AS05TestingGroundsFPSGameMode::AS05TestingGroundsFPSGameMode()
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
 	// use our custom HUD class
-	HUDClass = AS05TestingGroundsFPSHUD::StaticClass();
+	HUDClass = ATestingGroundsHUD::StaticClass();
 }
