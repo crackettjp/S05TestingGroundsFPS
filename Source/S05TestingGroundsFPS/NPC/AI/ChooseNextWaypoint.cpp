@@ -1,12 +1,12 @@
 // Copyright (c) Parallel Thinking Ltd 2016
 
 #include "S05TestingGroundsFPS.h"
-#include "CHooseNextWaypoint.h"
+#include "ChooseNextWaypoint.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
 #include "PatrolRoute.h"
 
-EBTNodeResult::Type UCHooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	// Get the Patrol Points.
 	UPatrolRoute* PatrolRoute = OwnerComp.GetAIOwner()->GetPawn()->FindComponentByClass<UPatrolRoute>();

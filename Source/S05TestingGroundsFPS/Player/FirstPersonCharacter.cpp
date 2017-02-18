@@ -1,7 +1,7 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
 #include "S05TestingGroundsFPS.h"
-#include "S05TestingGroundsFPSCharacter.h"
+#include "FirstPersonCharacter.h"
 #include "S05TestingGroundsFPSProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "GameFramework/InputSettings.h"
@@ -9,9 +9,9 @@
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
 //////////////////////////////////////////////////////////////////////////
-// AS05TestingGroundsFPSCharacter
+// AFirstPersonCharacter
 
-AS05TestingGroundsFPSCharacter::AS05TestingGroundsFPSCharacter()
+AFirstPersonCharacter::AFirstPersonCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
@@ -53,7 +53,7 @@ AS05TestingGroundsFPSCharacter::AS05TestingGroundsFPSCharacter()
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
-void AS05TestingGroundsFPSCharacter::BeginPlay()
+void AFirstPersonCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
@@ -64,7 +64,7 @@ void AS05TestingGroundsFPSCharacter::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void AS05TestingGroundsFPSCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
+void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	// set up gameplay key bindings
 	check(InputComponent);
@@ -72,25 +72,25 @@ void AS05TestingGroundsFPSCharacter::SetupPlayerInputComponent(class UInputCompo
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
-	//InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AS05TestingGroundsFPSCharacter::TouchStarted);
+	//InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AFirstPersonCharacter::TouchStarted);
 	if (EnableTouchscreenMovement(InputComponent) == false)
 	{
-		InputComponent->BindAction("Fire", IE_Pressed, this, &AS05TestingGroundsFPSCharacter::OnFire);
+		InputComponent->BindAction("Fire", IE_Pressed, this, &AFirstPersonCharacter::OnFire);
 	}
 
-	InputComponent->BindAxis("MoveForward", this, &AS05TestingGroundsFPSCharacter::MoveForward);
-	InputComponent->BindAxis("MoveRight", this, &AS05TestingGroundsFPSCharacter::MoveRight);
+	InputComponent->BindAxis("MoveForward", this, &AFirstPersonCharacter::MoveForward);
+	InputComponent->BindAxis("MoveRight", this, &AFirstPersonCharacter::MoveRight);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	InputComponent->BindAxis("TurnRate", this, &AS05TestingGroundsFPSCharacter::TurnAtRate);
+	InputComponent->BindAxis("TurnRate", this, &AFirstPersonCharacter::TurnAtRate);
 	InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	InputComponent->BindAxis("LookUpRate", this, &AS05TestingGroundsFPSCharacter::LookUpAtRate);
+	InputComponent->BindAxis("LookUpRate", this, &AFirstPersonCharacter::LookUpAtRate);
 }
 
-void AS05TestingGroundsFPSCharacter::OnFire()
+void AFirstPersonCharacter::OnFire()
 {
 	// try and fire a projectile
 	if (ProjectileClass != NULL)
@@ -126,7 +126,7 @@ void AS05TestingGroundsFPSCharacter::OnFire()
 
 }
 
-void AS05TestingGroundsFPSCharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
+void AFirstPersonCharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	if (TouchItem.bIsPressed == true)
 	{
@@ -138,7 +138,7 @@ void AS05TestingGroundsFPSCharacter::BeginTouch(const ETouchIndex::Type FingerIn
 	TouchItem.bMoved = false;
 }
 
-void AS05TestingGroundsFPSCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
+void AFirstPersonCharacter::EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	if (TouchItem.bIsPressed == false)
 	{
@@ -151,7 +151,7 @@ void AS05TestingGroundsFPSCharacter::EndTouch(const ETouchIndex::Type FingerInde
 	TouchItem.bIsPressed = false;
 }
 
-void AS05TestingGroundsFPSCharacter::TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location)
+void AFirstPersonCharacter::TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location)
 {
 	if ((TouchItem.bIsPressed == true) && (TouchItem.FingerIndex == FingerIndex))
 	{
@@ -186,7 +186,7 @@ void AS05TestingGroundsFPSCharacter::TouchUpdate(const ETouchIndex::Type FingerI
 	}
 }
 
-void AS05TestingGroundsFPSCharacter::MoveForward(float Value)
+void AFirstPersonCharacter::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
@@ -195,7 +195,7 @@ void AS05TestingGroundsFPSCharacter::MoveForward(float Value)
 	}
 }
 
-void AS05TestingGroundsFPSCharacter::MoveRight(float Value)
+void AFirstPersonCharacter::MoveRight(float Value)
 {
 	if (Value != 0.0f)
 	{
@@ -204,27 +204,27 @@ void AS05TestingGroundsFPSCharacter::MoveRight(float Value)
 	}
 }
 
-void AS05TestingGroundsFPSCharacter::TurnAtRate(float Rate)
+void AFirstPersonCharacter::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void AS05TestingGroundsFPSCharacter::LookUpAtRate(float Rate)
+void AFirstPersonCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
-bool AS05TestingGroundsFPSCharacter::EnableTouchscreenMovement(class UInputComponent* InputComponent)
+bool AFirstPersonCharacter::EnableTouchscreenMovement(class UInputComponent* InputComponent)
 {
 	bool bResult = false;
 	if (FPlatformMisc::GetUseVirtualJoysticks() || GetDefault<UInputSettings>()->bUseMouseForTouch)
 	{
 		bResult = true;
-		InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AS05TestingGroundsFPSCharacter::BeginTouch);
-		InputComponent->BindTouch(EInputEvent::IE_Released, this, &AS05TestingGroundsFPSCharacter::EndTouch);
-		InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AS05TestingGroundsFPSCharacter::TouchUpdate);
+		InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AFirstPersonCharacter::BeginTouch);
+		InputComponent->BindTouch(EInputEvent::IE_Released, this, &AFirstPersonCharacter::EndTouch);
+		InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &AFirstPersonCharacter::TouchUpdate);
 	}
 	return bResult;
 }

@@ -1,12 +1,12 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 #pragma once
 #include "GameFramework/Character.h"
-#include "S05TestingGroundsFPSCharacter.generated.h"
+#include "FirstPersonCharacter.generated.h"
 
 class UInputComponent;
 
 UCLASS(config=Game)
-class AS05TestingGroundsFPSCharacter : public ACharacter
+class AFirstPersonCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -26,7 +26,7 @@ class AS05TestingGroundsFPSCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCameraComponent;
 public:
-	AS05TestingGroundsFPSCharacter();
+	AFirstPersonCharacter();
 
 	virtual void BeginPlay();
 

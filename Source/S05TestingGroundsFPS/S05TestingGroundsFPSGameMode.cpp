@@ -3,7 +3,7 @@
 #include "S05TestingGroundsFPS.h"
 #include "S05TestingGroundsFPSGameMode.h"
 #include "S05TestingGroundsFPSHUD.h"
-#include "S05TestingGroundsFPSCharacter.h"
+#include "Player/FirstPersonCharacter.h"
 
 AS05TestingGroundsFPSGameMode::AS05TestingGroundsFPSGameMode()
 	: Super()

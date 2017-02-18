@@ -3,13 +3,13 @@
 #pragma once
 
 #include "BehaviorTree/BTTaskNode.h"
-#include "CHooseNextWaypoint.generated.h"
+#include "ChooseNextWaypoint.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UCHooseNextWaypoint : public UBTTaskNode
+class UChooseNextWaypoint : public UBTTaskNode
 {
 	GENERATED_BODY()
 	
