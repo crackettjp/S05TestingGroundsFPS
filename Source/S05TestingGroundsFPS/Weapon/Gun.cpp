@@ -14,14 +14,12 @@ AGun::AGun()
 
 	// Create a gun mesh component
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
-	SkeletalMesh->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
+	SetRootComponent(SkeletalMesh);
 	SkeletalMesh->bCastDynamicShadow = false;
 	SkeletalMesh->CastShadow = false;
-	//SkeletalMesh->SetupAttachment(Mesh1P, TEXT("GripPoint"));
 
 	MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
 	MuzzleLocation->SetupAttachment(SkeletalMesh);
-	MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
 }
 
 // Called when the game starts or when spawned
@@ -41,7 +39,7 @@ void AGun::Tick( float DeltaTime )
 void AGun::OnFire()
 {
 	// try and fire a projectile
-	if (ProjectileClass != nullptr && MuzzleLocation != nullptr)
+	if (ProjectileClass != nullptr)
 	{
 		const FRotator SpawnRotation = MuzzleLocation->GetComponentRotation();
 		const FVector SpawnLocation = MuzzleLocation->GetComponentLocation();
